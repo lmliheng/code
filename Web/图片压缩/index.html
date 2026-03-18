@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片压缩上传</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9ff;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f2ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #e8ebff;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .upload-text span {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .settings {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 10px;
+        }
+
+        .settings h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .setting-item label {
+            color: #555;
+            font-size: 14px;
+        }
+
+        .setting-item input[type="range"] {
+            width: 200px;
+            accent-color: #667eea;
+        }
+
+        .setting-item select {
+            padding: 8px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .setting-item select:focus {
+            border-color: #667eea;
+        }
+
+        .value-display {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .preview-section {
+            margin-top: 25px;
+            display: none;
+        }
+
+        .preview-section.show {
+            display: block;
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .preview-box {
+            text-align: center;
+        }
+
+        .preview-box h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .preview-img {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-info {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .file-info span {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn-group {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .progress-bar {
+            margin-top: 20px;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-bar.show {
+            display: block;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+
+        .status.show {
+            display: block;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .result-section {
+            margin-top: 25px;
+            display: none;
+        }
+
+        .result-section.show {
+            display: block;
+        }
+
+        .result-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .result-preview {
+            text-align: center;
+        }
+
+        .result-preview img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .download-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 25px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📷 图片压缩上传工具</h1>
+        
+        <!-- 上传区域 -->
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <p class="upload-text">拖拽图片到这里，或 <span>点击选择文件</span></p>
+            <p style="color: #999; font-size: 12px; margin-top: 10px;">支持 JPG、PNG、GIF、WebP 格式</p>
+        </div>
+        <input type="file" id="fileInput" accept="image/*">
+
+        <!-- 压缩设置 -->
+        <div class="settings">
+            <h3>⚙️ 压缩设置</h3>
+            <div class="setting-item">
+                <label>压缩质量：</label>
+                <input type="range" id="quality" min="0.1" max="1" step="0.1" value="0.7">  
+                <!-- type=range 滑动条-->
+                <span class="value-display" id="qualityValue">70%</span>
+            </div>
+            <div class="setting-item">
+                <label>最大宽度/高度：</label>
+                <input type="range" id="maxSize" min="500" max="2000" step="100" value="1200">
+                <span class="value-display" id="maxSizeValue">1200px</span>
+            </div>
+            <div class="setting-item">
+                <label>输出格式：</label>
+                <select id="outputFormat">
+                    <option value="image/jpeg">JPEG</option>
+                    <option value="image/png">PNG</option>
+                    <option value="image/webp">WebP</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 预览区域 -->
+        <div class="preview-section" id="previewSection">
+            <h3>🖼️ 图片预览</h3>
+            <div class="preview-container">
+
+                <div class="preview-box">
+                    <h4>原始图片</h4>
+                    <img id="originalPreview" class="preview-img" alt="原始图片">
+                    <div class="file-info">
+                        大小: <span id="originalSize">0 KB</span> | 
+                        尺寸: <span id="originalDimensions">0 x 0</span>
+                    </div>
+                </div>
+
+                <div class="preview-box">
+                    <h4>压缩后图片</h4>
+                    <img id="compressedPreview" class="preview-img" alt="压缩后图片">
+                    <div class="file-info">
+                        大小: <span id="compressedSize">0 KB</span> | 
+                        尺寸: <span id="compressedDimensions">0 x 0</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- 按钮组 -->
+        <div class="btn-group">
+            <button class="btn btn-primary" id="compressBtn" disabled>🔄 开始压缩</button>
+            <button class="btn btn-secondary" id="resetBtn">🔃 重新选择</button>
+        </div>
+
+        <!-- 进度条 -->
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <!-- 状态提示 -->
+        <div class="status" id="status"></div>
+
+        <!-- 结果区域 -->
+        <div class="result-section" id="resultSection">
+            <h3>✅ 处理结果</h3>
+            <div class="result-preview">
+                <img id="resultImage" alt="处理结果">
+            </div>
+            <div class="file-info" style="text-align: center;">
+                最终大小: <span id="finalSize">0 KB</span> | 
+                压缩率: <span id="compressionRate">0%</span>
+            </div>
+            <a href="#" class="download-btn" id="downloadBtn">⬇️ 下载图片</a>
+        </div>
+    </div>
+
+    <script>
+        // DOM 元素
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const qualitySlider = document.getElementById('quality');
+        const qualityValue = document.getElementById('qualityValue');
+        const maxSizeSlider = document.getElementById('maxSize');
+        const maxSizeValue = document.getElementById('maxSizeValue');
+        const outputFormat = document.getElementById('outputFormat');
+        const previewSection = document.getElementById('previewSection');
+        const originalPreview = document.getElementById('originalPreview');
+        const compressedPreview = document.getElementById('compressedPreview');
+        const originalSize = document.getElementById('originalSize');
+        const compressedSize = document.getElementById('compressedSize');
+        const originalDimensions = document.getElementById('originalDimensions');
+        const compressedDimensions = document.getElementById('compressedDimensions');
+        const compressBtn = document.getElementById('compressBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const status = document.getElementById('status');
+        const resultSection = document.getElementById('resultSection');
+        const resultImage = document.getElementById('resultImage');
+        const finalSize = document.getElementById('finalSize');
+        const compressionRate = document.getElementById('compressionRate');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        let selectedFile = null;
+
+        // 事件监听
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type.startsWith('image/')) {
+                handleFile(files[0]);
+            } else {
+                showStatus('请上传有效的图片文件！', 'error');
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        qualitySlider.addEventListener('input', () => {
+            qualityValue.textContent = Math.round(qualitySlider.value * 100) + '%';
+        });
+
+        maxSizeSlider.addEventListener('input', () => {
+            maxSizeValue.textContent = maxSizeSlider.value + 'px';
+        });
+
+
+
+
+        compressBtn.addEventListener('click', startCompression); // 压缩按钮点击事件 压缩逻辑开始
+        resetBtn.addEventListener('click', resetAll);
+
+        // 处理选择的文件
+        function handleFile(file) {
+            selectedFile = file;
+            
+            // 显示文件信息
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    originalPreview.src = e.target.result;
+                    originalSize.textContent = formatFileSize(file.size);
+                    originalDimensions.textContent = `${img.width} x ${img.height}`;
+                    
+                    // 显示预览区域
+                    previewSection.classList.add('show');
+                    compressBtn.disabled = false;
+                    
+                    // 隐藏之前的结果
+                    resultSection.classList.remove('show');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+
+        // 开始压缩
+        async function startCompression() {
+            if (!selectedFile) {
+                showStatus('请先选择图片！', 'error');
+                return;
+            }
+            try {
+                compressBtn.disabled = true;
+                showProgress(true);
+                updateProgress(20);
+                showStatus('正在压缩图片...', 'loading');
+
+                // 本地压缩
+                // const compressed = await compressImage(selectedFile);
+                
+                updateProgress(50);
+                showStatus('正在上传到服务器...', 'loading');
+
+
+                // 上传到后端
+                const formData = new FormData();
+                formData.append('image', selectedFile);
+                // formData.append('filename', selectedFile.name);
+                // formData.append('originalSize', selectedFile.size);
+                console.log("上传的数据：", formData);
+
+                const response = await fetch('http://127.0.0.1:8000/api/gallery_compress', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                updateProgress(80);// 进度条
+
+
+                if (!response.ok) {
+                    throw new Error('服务器处理失败');
+                }
+
+                const result = await response.json();
+                updateProgress(100);
+                showStatus('处理完成！', 'success');
+
+                // 显示最终结果
+                resultImage.src = result.processedImage;
+                finalSize.textContent = formatFileSize(result.finalSize);
+                const rate = ((1 - result.finalSize / selectedFile.size) * 100).toFixed(1); // 压缩率
+                compressionRate.textContent = rate + '%';
+
+                // 设置下载链接
+                downloadBtn.href = result.processedImage;
+                downloadBtn.download = `processed_${selectedFile.name}`;
+                
+                resultSection.classList.add('show');
+
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('处理失败: ' + error.message, 'error');
+            } finally {
+                compressBtn.disabled = false;
+                setTimeout(() => showProgress(false), 500);
+            }
+        }
+
+        // 重置所有
+        function resetAll() {
+            selectedFile = null;
+            fileInput.value = '';
+            previewSection.classList.remove('show');
+            resultSection.classList.remove('show');
+            compressBtn.disabled = true;
+            showStatus('', '');
+            showProgress(false);
+            
+            // 重置滑块
+            qualitySlider.value = 0.7;
+            qualityValue.textContent = '70%';
+            maxSizeSlider.value = 1200;
+            maxSizeValue.textContent = '1200px';
+            outputFormat.value = 'image/jpeg';
+        }
+
+        // 显示进度条
+        function showProgress(show) {
+            if (show) {
+                progressBar.classList.add('show');
+            } else {
+                progressBar.classList.remove('show');
+                progressFill.style.width = '0%';
+            }
+        }
+
+
+
+        // 更新进度
+        function updateProgress(percent) {
+            progressFill.style.width = percent + '%';
+        }
+
+
+
+        // 显示状态
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = 'status show ' + type;
+        }
+    </script>
+</body>
+</html>
