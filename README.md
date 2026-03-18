@@ -6,7 +6,15 @@
 
 切换到你感兴趣的分支：
 ```
-git clone -b 分支名 --single-branch https://github.com/lmliheng/code.git
+git clone -b python --single-branch https://github.com/lmliheng/code.git
+```
+
+### 启动
+依赖
+```python
+pip install -r requirement.txt
+pip freeze #查看依赖
+pip freeze > requirements.txt #导出依赖
 ```
 接下来，你可以在本地运行和测试代码。具体的运行方法和依赖项请参考相应分支的 README 文件。
 ### 贡献代码
