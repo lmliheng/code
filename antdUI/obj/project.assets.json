@@ -1,0 +1,130 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0-windows7.0": {
+      "AntdUI/2.3.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0-windows7.0/AntdUI.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0-windows7.0/AntdUI.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WindowsForms"
+        ]
+      }
+    }
+  },
+  "libraries": {
+    "AntdUI/2.3.2": {
+      "sha512": "igMRy3SO6I2vMpROiKoRKyxcZ+pcW6cQHJzBcMX2EQEhT3X59ZnK/xTC9Nafd0vxv+Zq0DYMq84oqW0GvpV7qw==",
+      "type": "package",
+      "path": "antdui/2.3.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "antdui.2.3.2.nupkg.sha512",
+        "antdui.nuspec",
+        "lib/net10.0-windows7.0/AntdUI.dll",
+        "lib/net10.0-windows7.0/AntdUI.xml",
+        "lib/net40/AntdUI.dll",
+        "lib/net40/AntdUI.xml",
+        "lib/net46/AntdUI.dll",
+        "lib/net46/AntdUI.xml",
+        "lib/net48/AntdUI.dll",
+        "lib/net48/AntdUI.xml",
+        "lib/net6.0-windows7.0/AntdUI.dll",
+        "lib/net6.0-windows7.0/AntdUI.xml",
+        "lib/net8.0-windows7.0/AntdUI.dll",
+        "lib/net8.0-windows7.0/AntdUI.xml",
+        "lib/net9.0-windows7.0/AntdUI.dll",
+        "lib/net9.0-windows7.0/AntdUI.xml",
+        "logo.png"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0-windows7.0": [
+      "AntdUI >= 2.3.2"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Administrator\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\Administrator\\Desktop\\work\\WinFormsApp1\\WinFormsApp1.csproj",
+      "projectName": "WinFormsApp1",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\work\\WinFormsApp1\\WinFormsApp1.csproj",
+      "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Administrator\\Desktop\\work\\WinFormsApp1\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0-windows"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0-windows7.0": {
+          "targetAlias": "net8.0-windows",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
+    },
+    "frameworks": {
+      "net8.0-windows7.0": {
+        "targetAlias": "net8.0-windows",
+        "dependencies": {
+          "AntdUI": {
+            "target": "Package",
+            "version": "[2.3.2, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          },
+          "Microsoft.WindowsDesktop.App.WindowsForms": {
+            "privateAssets": "none"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

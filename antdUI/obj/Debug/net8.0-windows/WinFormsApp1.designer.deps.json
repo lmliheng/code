@@ -1,0 +1,28 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "AntdUI/2.3.2": {
+        "runtime": {
+          "lib/net8.0-windows7.0/AntdUI.dll": {
+            "assemblyVersion": "2.3.2.0",
+            "fileVersion": "2.3.2.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AntdUI/2.3.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-igMRy3SO6I2vMpROiKoRKyxcZ+pcW6cQHJzBcMX2EQEhT3X59ZnK/xTC9Nafd0vxv+Zq0DYMq84oqW0GvpV7qw==",
+      "path": "antdui/2.3.2",
+      "hashPath": "antdui.2.3.2.nupkg.sha512"
+    }
+  }
+}

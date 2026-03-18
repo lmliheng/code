@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "LYRKsXLvDP4=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\work\\WinFormsApp1\\WinFormsApp1.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\antdui\\2.3.2\\antdui.2.3.2.nupkg.sha512"
+  ],
+  "logs": []
+}
